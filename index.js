@@ -47,6 +47,7 @@ const TurtleCoind = function (opts) {
   this.dataDir = opts.dataDir || path.resolve(os.homedir(), './.TurtleCoin')
   this.logFile = opts.logFile || path.resolve(__dirname, './TurtleCoind.log')
   this.logLevel = opts.logLevel || 2
+  this.rocksdb = opts.rocksdb || false
   this.testnet = opts.testnet || false
   this.enableCors = opts.enableCors || false
   this.enableBlockExplorer = opts.enableBlockExplorer || true
@@ -66,6 +67,7 @@ const TurtleCoind = function (opts) {
   this.dbMaxOpenFiles = opts.dbMaxOpenFiles || false
   this.dbWriteBufferSize = opts.dbWriteBufferSize || false
   this.dbReadBufferSize = opts.dbReadBufferSize || false
+  this.dbEnableCompression = opts.dbEnableCompression || false
   this.feeAddress = opts.feeAddress || false
   this.feeAmount = opts.feeAmount || 0
 
@@ -346,6 +348,8 @@ TurtleCoind.prototype._buildargs = function () {
   if (this.testnet) args = util.format('%s --testnet', args)
   if (this.enableCors) args = util.format('%s --enable-cors %s', args, this.enableCors)
   if (this.enableBlockExplorer) args = util.format('%s --enable-blockexplorer', args)
+  if (this.dbEnableCompression) args = util.format('%s --db-enable-compression', args)
+  if (this.rocksdb) args = util.format('%s --rocksdb', args)
   if (this.loadCheckpoints) {
     if (fs.existsSync(path.resolve(this.loadCheckpoints))) {
       args = util.format('%s --load-checkpoints %s', args, path.resolve(this.loadCheckpoints))
